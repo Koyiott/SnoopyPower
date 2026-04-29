@@ -1,0 +1,86 @@
+# =================================================
+# Ignore build artifacts inside os_mirabelle/
+# =================================================
+os_mirabelle/**/*.o
+os_mirabelle/**/*.a
+os_mirabelle/**/*.so
+os_mirabelle/**/*.elf
+os_mirabelle/**/*.bin
+os_mirabelle/**/*.out
+os_mirabelle/**/*.map
+
+# Final executables
+os_mirabelle/**/myapp
+
+# -------------------------------------------------
+# Backup / old files
+# -------------------------------------------------
+os_mirabelle/**/*.bak
+os_mirabelle/**/*.old
+os_mirabelle/**/*~
+os_mirabelle/**/*.swp
+os_mirabelle/**/*.swo
+
+# -------------------------------------------------
+# Dependency files
+# -------------------------------------------------
+os_mirabelle/**/*.d
+os_mirabelle/**/*.dep
+
+# -------------------------------------------------
+# Logs and temp files
+# -------------------------------------------------
+os_mirabelle/**/*.log
+os_mirabelle/**/*.tmp
+
+os_mirabelle/**/*.csv
+os_mirabelle/traces/*.csv
+os_mirabelle/traces/*.npy
+os_mirabelle/traces/*.json
+
+os_mirabelle/traces_old/
+
+# -------------------------------------------------
+# Editor / IDE
+# -------------------------------------------------
+.vscode/
+.idea/
+*.code-workspace
+
+# -------------------------------------------------
+# OS junk
+# -------------------------------------------------
+.DS_Store
+Thumbs.db
+
+# -------------------------------------------------
+# Optional future build directories
+# -------------------------------------------------
+os_mirabelle/build/
+os_mirabelle/dist/
+
+
+# -------------------------------------------------
+# Notebooks output
+# -------------------------------------------------
+notebooks/**/*.ipynb_checkpoints
+notebooks/**/*.output
+notebooks/**/*.cache
+notebooks/traces/*
+notebooks/datasets/*
+notebooks/results/*
+notebooks/__pycache__/
+notebooks/figures_old/*
+notebooks/old_figures_300_450/
+notebooks/old_figures_300_450_thermal_impact/
+notebooks/datasets/*
+!notebooks/results/validation/hfr_20260217_211818/hfr_qda_flush_reload.png
+
+# -------------------------------------------------
+# Remote control output
+# -------------------------------------------------
+rctrl/traces/*
+
+
+notebooks/results_arith_osc_*
+notebooks/traces_arith_osc_more/*

@@ -1,0 +1,65 @@
+cff-version: 1.2.0
+message: >-
+  If you use SnoopyPower in your research, please cite this software and
+  the SCAbox papers describing the TDC and RO sensors it builds upon.
+title: "SnoopyPower"
+abstract: >-
+  SnoopyPower is an open research framework for characterizing
+  microarchitectural side channels using an on-chip Time-to-Digital Converter
+  (TDC) power sensor on Zynq-7000 (ARM Cortex-A9) SoCs running Linux. It
+  provides deterministic L1 / L2 / DRAM cache-state characterization and a
+  publication-quality statistical analysis pipeline (HPF preprocessing,
+  Welch's t-test, KS-based POI detection, LDA / QDA classification).
+authors:
+  - family-names: "Quéré"
+    given-names: "Eliott"
+license: MIT
+type: software
+year: 2026
+keywords:
+  - side-channel
+  - TDC
+  - power analysis
+  - Zynq-7000
+  - Cortex-A9
+  - cache
+  - FPGA
+  - SCAbox
+
+references:
+  - type: conference-paper
+    title: "Remote Side-Channel Attacks on Heterogeneous SoC"
+    authors:
+      - family-names: "Gravellier"
+        given-names: "Joseph"
+      - family-names: "Dutertre"
+        given-names: "Jean-Max"
+      - family-names: "Teglia"
+        given-names: "Yannick"
+      - family-names: "Loubet-Moundi"
+        given-names: "Philippe"
+      - family-names: "Francis"
+        given-names: "Olivier"
+    collection-title: >-
+      Smart Card Research and Advanced Applications,
+      18th International Conference, CARDIS 2019
+    location:
+      name: "Prague, Czech Republic"
+    year: 2019
+    month: 11
+
+  - type: conference-paper
+    title: "High-Speed Ring Oscillator based Sensors for Remote Side-Channel Attacks on FPGAs"
+    authors:
+      - family-names: "Gravellier"
+        given-names: "Joseph"
+      - family-names: "Dutertre"
+        given-names: "Jean-Max"
+      - family-names: "Teglia"
+        given-names: "Yannick"
+      - family-names: "Loubet-Moundi"
+        given-names: "Philippe"
+    collection-title: >-
+      2019 International Conference on ReConFigurable Computing and FPGAs
+      (ReConFig)
+    year: 2019

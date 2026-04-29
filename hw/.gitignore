@@ -1,0 +1,55 @@
+# =================================================
+# Vivado / Hardware build artifacts
+# =================================================
+
+# Global Vivado noise
+*.jou
+*.log
+*.str
+*.tmp
+*.wdb
+*.wcfg
+*.pb
+*.dmp
+*.rpt
+*.dcp
+*.ltx
+*.xpr.user
+vivado_pid*.str
+
+# Vivado generated directories (project + IP builds)
+.Xil/
+**/.Xil/
+*.cache/
+**/*.cache/
+*.gen/
+**/*.gen/
+*.runs/
+**/*.runs/
+*.sim/
+**/*.sim/
+*.hw/
+**/*.hw/
+*.ip_user_files/
+**/*.ip_user_files/
+*.srcs/
+**/*.srcs/
+
+*.bit
+*.hwh
+*.xsa
+
+!snoopypower.bit
+!snoopypower.hwh
+!snoopypower.xsa
+
+!releases/**/*.bit
+!releases/**/*.hwh
+!releases/**/*.xsa
+
+# =================================================
+# Python caches that often appear in HW repos too
+# =================================================
+__pycache__/
+**/__pycache__/
+*.pyc

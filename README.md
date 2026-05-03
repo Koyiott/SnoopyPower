@@ -49,7 +49,7 @@ The bare-metal implementation (Flush+Power AES T-table attack, SnoopyPower cross
 
 The TDC sensor is embedded in the Zynq-7000 Programmable Logic (PL) and shares the PDN with the dual Arm Cortex-A9 cores. A single software-triggered memory load generates a short PDN signature captured by the TDC at 250 MSa/s (4 ns sampling period). These signatures are sufficient to classify the memory-service level with up to **98.7% accuracy** (LDA, 3-class L1/L2/DRAM) under OS noise, and to discriminate coherence paths (self vs. peer-L1 snoop) with **94.3% accuracy** (QDA) after retraining on OS traces.
 
-This is an adaptation of the [SCAbox](https://gitlab.emse.fr/securityinhardware/SCAbox) framework to Linux, with custom drivers, bitstream, and userspace tooling for the PynqZ1 board. No kernel module, no bare-metal flash, no JTAG.
+This is an adaptation of the [SCAbox](https://emse-sas-lab.github.io/SCAbox/) framework to Linux, with custom drivers, bitstream, and userspace tooling for the PynqZ1 board. No kernel module, no bare-metal flash, no JTAG.
 
 <p align="center">
   <img src="media/images/ArchitectureZynq7000TDC.svg" alt="Zynq-7000 with embedded TDC sensor" width="820"/>
@@ -101,7 +101,7 @@ SnoopyPower identifies the victim-written line among 100 unseen candidate addres
 
 ## Built upon SCAbox
 
-SnoopyPower is built upon [SCAbox](https://gitlab.emse.fr/securityinhardware/SCAbox), the open framework for FPGA-based remote side-channel analysis developed at Ecole des Mines de Saint-Etienne (EMSE). The TDC bank and FIFO IP cores under [`hw/ip_repo/`](hw/ip_repo/) preserve their original SCAbox vendor namespace (`emse.sas:sca:tdc_bank`, `emse.sas:sca:fifo_and_ctrl`) inside their `component.xml` so the Vivado IP catalog still recognises them.
+SnoopyPower is built upon [SCAbox](https://emse-sas-lab.github.io/SCAbox/), the open framework for FPGA-based remote side-channel analysis developed at Ecole des Mines de Saint-Etienne (EMSE). The TDC bank and FIFO IP cores under [`hw/ip_repo/`](hw/ip_repo/) preserve their original SCAbox vendor namespace (`emse.sas:sca:tdc_bank`, `emse.sas:sca:fifo_and_ctrl`) inside their `component.xml` so the Vivado IP catalog still recognises them.
 
 This repository is an OS adaptation of SCAbox to PynqLinux 3.0, providing custom drivers, bitstream, and the full userspace measurement and analysis pipeline.
 
@@ -465,7 +465,7 @@ If you use this work, please cite the HOST 2026 paper:
 }
 ```
 
-The TDC and FIFO IP cores are derived from [SCAbox](https://gitlab.emse.fr/securityinhardware/SCAbox) (Gravellier et al., CARDIS 2019; Gravellier et al., ReConFig 2019). If you use these IP cores directly, please cite the SCAbox papers as well.
+The TDC and FIFO IP cores are derived from [SCAbox](https://emse-sas-lab.github.io/SCAbox/) (Gravellier et al., CARDIS 2019; Gravellier et al., ReConFig 2019). If you use these IP cores directly, please cite the SCAbox papers as well.
 
 A `CITATION.cff` file is provided at the root of the repository; GitHub will surface the citation automatically.
 
@@ -479,6 +479,6 @@ SnoopyPower is released under the **MIT License**, see [`LICENSE`](LICENSE).
 Copyright 2026 Eliott Quéré.
 
 The TDC and FIFO IP cores under [`hw/ip_repo/`](hw/ip_repo/) are derived
-from [SCAbox](https://gitlab.emse.fr/securityinhardware/SCAbox) (EMSE,
+from [SCAbox](https://emse-sas-lab.github.io/SCAbox/) (EMSE,
 Ecole des Mines de Saint-Etienne). Refer to the upstream project for the
 license that applies to those individual components.

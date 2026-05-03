@@ -5,7 +5,7 @@ used by SnoopyPower. The userspace measurement code and analysis pipeline live
 in `../firmware/` and `../notebooks/` respectively.
 
 The TDC + FIFO IPs in `ip_repo/` are derived from the
-[SCAbox](https://gitlab.emse.fr/securityinhardware/SCAbox) project (École des
+[SCAbox](https://emse-sas-lab.github.io/SCAbox/) project (École des
 Mines de Saint-Étienne); the upstream component name `emse.sas:sca:tdc_bank`
 and `emse.sas:sca:fifo_and_ctrl` is preserved inside `component.xml` so the
 Vivado IP catalog still recognises them.

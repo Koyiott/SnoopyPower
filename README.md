@@ -476,9 +476,17 @@ A `CITATION.cff` file is provided at the root of the repository; GitHub will sur
 
 SnoopyPower is released under the **MIT License**, see [`LICENSE`](LICENSE).
 
-Copyright 2026 Eliott Quéré.
+Copyright 2026 Eliott Quéré, Universite de Rennes.
+
+Developed in the [SUSHI](https://team.inria.fr/sushi/) team at CentraleSupelec / IRISA.
 
 The TDC and FIFO IP cores under [`hw/ip_repo/`](hw/ip_repo/) are derived
 from [SCAbox](https://emse-sas-lab.github.io/SCAbox/) (EMSE,
 Ecole des Mines de Saint-Etienne). Refer to the upstream project for the
 license that applies to those individual components.
+
+---
+
+## Contact
+
+Eliott Quere -- [www.equere.fr](https://www.equere.fr)

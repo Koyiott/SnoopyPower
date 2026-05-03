@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2026 Eliott Quéré
+Copyright (c) 2026 Eliott Quéré, Université de Rennes
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ The TDC sensor and FIFO controller IP cores under hw/ip_repo/ are derived
 from SCAbox; the original IP packages preserve their EMSE vendor namespace
 (emse.sas:sca:*) inside their component.xml.
 
-Project page:  https://gitlab.emse.fr/securityinhardware/SCAbox
+Project page:  https://emse-sas-lab.github.io/SCAbox/
 
 The TDC sensor design and original FPGA-based remote SCA methodology are
 described in the works listed in CITATION.cff; please cite them when using

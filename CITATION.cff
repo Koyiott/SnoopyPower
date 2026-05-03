@@ -1,7 +1,6 @@
 cff-version: 1.2.0
 message: >-
-  If you use SnoopyPower in your research, please cite the HOST 2026 paper
-  and the SCAbox papers describing the TDC and RO sensors it builds upon.
+  If you use SnoopyPower in your research, please cite the HOST 2026 paper.
 title: "SnoopyPower! Remote Power Attacks on Cache and Coherence Paths"
 abstract: >-
   SnoopyPower demonstrates that power leakage from the shared Power
@@ -16,22 +15,22 @@ abstract: >-
 authors:
   - family-names: "Quéré"
     given-names: "Eliott"
-    affiliation: "CentraleSupélec, Univ Rennes, Inria, CNRS, IRISA"
+    affiliation: "Univ Rennes, CentraleSupélec, Inria, CNRS, IRISA, SUSHI team"
   - family-names: "Méndez Real"
     given-names: "Maria"
     affiliation: "Univ Bretagne-Sud, Lab-STICC, UMR 6285"
   - family-names: "Palumbo"
     given-names: "Alessandro"
-    affiliation: "CentraleSupélec, Univ Rennes, Inria, CNRS, IRISA"
+    affiliation: "Univ Rennes, CentraleSupélec, Inria, CNRS, IRISA, SUSHI team"
   - family-names: "Rokicki"
     given-names: "Thomas"
-    affiliation: "CentraleSupélec, Univ Rennes, Inria, CNRS, IRISA"
+    affiliation: "Univ Rennes, CentraleSupélec, Inria, CNRS, IRISA, SUSHI team"
   - family-names: "Bossuet"
     given-names: "Lilian"
     affiliation: "Univ Lyon, UJM-Saint-Étienne, CNRS, Lab. Hubert Curien, UMR 5516"
   - family-names: "Salvador"
     given-names: "Rubén"
-    affiliation: "CentraleSupélec, Univ Rennes, Inria, CNRS, IRISA"
+    affiliation: "Univ Rennes, CentraleSupélec, Inria, CNRS, IRISA, SUSHI team"
 license: MIT
 type: software
 year: 2026

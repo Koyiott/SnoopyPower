@@ -1,30 +1,79 @@
 cff-version: 1.2.0
 message: >-
-  If you use SnoopyPower in your research, please cite this software and
-  the SCAbox papers describing the TDC and RO sensors it builds upon.
-title: "SnoopyPower"
+  If you use SnoopyPower in your research, please cite the HOST 2026 paper
+  and the SCAbox papers describing the TDC and RO sensors it builds upon.
+title: "SnoopyPower! Remote Power Attacks on Cache and Coherence Paths"
 abstract: >-
-  SnoopyPower is an open research framework for characterizing
-  microarchitectural side channels using an on-chip Time-to-Digital Converter
-  (TDC) power sensor on Zynq-7000 (ARM Cortex-A9) SoCs running Linux. It
-  provides deterministic L1 / L2 / DRAM cache-state characterization and a
-  publication-quality statistical analysis pipeline (HPF preprocessing,
-  Welch's t-test, KS-based POI detection, LDA / QDA classification).
+  SnoopyPower demonstrates that power leakage from the shared Power
+  Distribution Network (PDN) of heterogeneous SoC-FPGAs can resolve CPU
+  microarchitectural states, including cache-hierarchy levels (L1, L2, DRAM)
+  and Snoop Control Unit (SCU) coherence paths, even when those states are
+  timing-indistinguishable on Arm processors. Two new attack primitives are
+  introduced: Flush+Power (same-core, timer-free cache attack) and
+  SnoopyPower (cross-core coherence-channel attack). This repository provides
+  the OS-adapted framework (PynqLinux 3.0) with drivers, bitstream, and a
+  full statistical analysis pipeline, built upon the SCAbox framework.
 authors:
   - family-names: "Quéré"
     given-names: "Eliott"
+    affiliation: "CentraleSupélec, Univ Rennes, Inria, CNRS, IRISA"
+  - family-names: "Méndez Real"
+    given-names: "Maria"
+    affiliation: "Univ Bretagne-Sud, Lab-STICC, UMR 6285"
+  - family-names: "Palumbo"
+    given-names: "Alessandro"
+    affiliation: "CentraleSupélec, Univ Rennes, Inria, CNRS, IRISA"
+  - family-names: "Rokicki"
+    given-names: "Thomas"
+    affiliation: "CentraleSupélec, Univ Rennes, Inria, CNRS, IRISA"
+  - family-names: "Bossuet"
+    given-names: "Lilian"
+    affiliation: "Univ Lyon, UJM-Saint-Étienne, CNRS, Lab. Hubert Curien, UMR 5516"
+  - family-names: "Salvador"
+    given-names: "Rubén"
+    affiliation: "CentraleSupélec, Univ Rennes, Inria, CNRS, IRISA"
 license: MIT
 type: software
 year: 2026
 keywords:
   - side-channel
-  - TDC
   - power analysis
+  - TDC
+  - PDN
+  - cache attack
+  - coherence
+  - Flush+Power
+  - SnoopyPower
   - Zynq-7000
   - Cortex-A9
-  - cache
+  - SoC-FPGA
   - FPGA
   - SCAbox
+  - HOST 2026
+
+preferred-citation:
+  type: conference-paper
+  title: "SnoopyPower! Remote Power Attacks on Cache and Coherence Paths"
+  authors:
+    - family-names: "Quéré"
+      given-names: "Eliott"
+    - family-names: "Méndez Real"
+      given-names: "Maria"
+    - family-names: "Palumbo"
+      given-names: "Alessandro"
+    - family-names: "Rokicki"
+      given-names: "Thomas"
+    - family-names: "Bossuet"
+      given-names: "Lilian"
+    - family-names: "Salvador"
+      given-names: "Rubén"
+  collection-title: >-
+    HOST 2026 - IEEE International Symposium on Hardware Oriented Security
+    and Trust
+  year: 2026
+  month: 5
+  location:
+    name: "Washington DC, United States"
 
 references:
   - type: conference-paper

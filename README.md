@@ -2,15 +2,17 @@
   <img src="media/images/SnoopyPower.png" alt="SnoopyPower" width="320"/>
 </p>
 
-<h1 align="center">SnoopyPower</h1>
+<h1 align="center">SnoopyPower!</h1>
 
 <p align="center">
-  <em>An on-chip TDC power side-channel sensor for Linux-running Cortex-A9 SoCs</em><br/>
-  <em>OS-platform cache-state characterization (L1 / L2 / DRAM) — fully reproducible.</em>
+  <em>Remote Power Attacks on Cache and Coherence Paths</em><br/>
+  <em>OS-adapted framework for PDN-based microarchitectural side-channel characterization on Zynq-7000 SoC-FPGAs.</em>
 </p>
 
 <p align="center">
+  <a href="https://hal.science/hal-05593696v1"><strong>Paper (HAL)</strong></a> ·
   <a href="#overview">Overview</a> ·
+  <a href="#attack-primitives">Attack Primitives</a> ·
   <a href="#quickstart">Quickstart</a> ·
   <a href="#architecture">Architecture</a> ·
   <a href="#patterns">Patterns</a> ·
@@ -24,22 +26,21 @@
 
 ## Overview
 
-**SnoopyPower** characterizes microarchitectural side-channel leakage on a
-**Xilinx Zynq-7000** (PynqZ1 / Zybo Z7-20) SoC running a stock Linux/PYNQ
-userland, using an **on-chip Time-to-Digital Converter (TDC)** sensor
-implemented in FPGA fabric.
+**SnoopyPower** is the companion code for the paper:
 
-The TDC shares the Power Distribution Network (PDN) with the dual ARM
-Cortex-A9 cores. Voltage fluctuations induced by cache and memory events
-modulate the propagation delay along the TDC's calibrated delay line,
-producing a thermometer-coded digital word at **250 MHz**. SnoopyPower drives
-the TDC + a hardware FIFO entirely from Linux userspace via `/dev/mem` MMIO —
-no kernel module, no bare-metal flash, no JTAG.
+> **SnoopyPower! Remote Power Attacks on Cache and Coherence Paths**
+> Eliott Quéré, Maria Méndez Real, Alessandro Palumbo, Thomas Rokicki, Lilian Bossuet, Rubén Salvador
+> *HOST 2026 — IEEE International Symposium on Hardware Oriented Security and Trust*, May 2026, Washington DC.
 
-This release ships **only the OS-platform characterization pipeline** —
-specifically, deterministic L1 hit / L2 hit / DRAM miss measurement campaigns
-and the publication-quality statistical analysis that turns those traces into
-classifiers and leakage assessments.
+The paper demonstrates that **power leakage from the shared Power Distribution Network (PDN)** of heterogeneous SoC-FPGAs can resolve CPU microarchitectural states — including cache-hierarchy levels (L1, L2, DRAM) and **Snoop Control Unit (SCU) coherence paths** — even when those states are deliberately **timing-indistinguishable** on Arm processors. This directly challenges the literature built around timing-centric mitigations.
+
+Two new attack primitives are introduced:
+- **Flush+Power** — a same-core, timer-free cache-probing primitive with cache-line resolution in shared-memory settings.
+- **SnoopyPower** — a cross-core coherence-channel attack that discriminates peer-L1 snoops from self-path loads, exposing SCU decisions and enabling address discovery.
+
+This repository provides the **OS-adapted platform** (PynqLinux / PYNQ 3.0) for the memory-level PDN characterization described in the paper (Section III and Section VI-D). It is built upon the [SCAbox](https://gitlab.emse.fr/securityinhardware/SCAbox) framework, adapted with custom drivers, bitstream, and userspace tooling for Linux execution on the PynqZ1 board — no kernel module, no bare-metal flash, no JTAG.
+
+The TDC sensor is embedded in the Zynq-7000 Programmable Logic (PL) and shares the PDN with the dual Arm Cortex-A9 cores. A single, software-triggered memory load generates a short PDN signature captured by the TDC at **250 MSa/s** (4 ns sampling period). These signatures are sufficient to classify the memory-service level with up to **98.7% accuracy** (LDA, 3-class L1/L2/DRAM) under OS noise, and to discriminate coherence paths (self vs. peer-L1 snoop) with **94.3% accuracy** (QDA) after retraining.
 
 <p align="center">
   <img src="media/images/ArchitectureZynq7000TDC.svg" alt="Architecture — Zynq-7000 with embedded TDC sensor" width="820"/>
@@ -50,13 +51,40 @@ events through the FPGA fabric.</em></p>
 
 ### Key features
 
-- **On-chip TDC power sensor** — 250 MHz sampling, sub-nanosecond resolution, no physical probe required
-- **Deterministic cache-state control** — userspace eviction-based patterns for L1 hit, L2 hit, and DRAM miss, all funnelling into the same assembly measurement window
-- **OS-native execution** — runs entirely from Linux userspace via `/dev/mem` MMIO; no kernel module
+- **On-chip TDC power sensor** — 250 MSa/s (4 ns period), sub-nanosecond resolution via thermometer-coded delay line, no physical probe required
+- **Deterministic cache-state control** — userspace eviction-based patterns for L1 hit, L2 hit, and DRAM miss, all funnelling into the same fenced assembly measurement window (DSB/ISB barriers for privileged, dependency chains for unprivileged)
+- **OS-native execution** — runs entirely from Linux userspace (PynqLinux 3.0 / Ubuntu 22.04) via `/dev/mem` MMIO; no kernel module
+- **Privileged and unprivileged probes** — both memory-barrier-based (Section III-B) and dependency-based (Section III-C) measurement windows, matching the paper's two probe designs
 - **Strong dataset generation** — random target addresses and values from `/dev/urandom` via a 2 MiB anonymous `mmap()` arena, eliminating deterministic bias
 - **FIFO-triggered measurement** — hardware FIFO synchronizes the TDC capture window with the memory access under test for cycle-accurate alignment
 - **Auto-calibrating TDC** — per-channel delay-line tuning with polarity-aware sweep, plus a `SNOOPYPOWER_TDC_DELAY` env var to lock calibration across runs
-- **Reproducible analysis pipeline** — Python scripts for HPF preprocessing, normality assessment, Welch's t-test (TVLA), KS-based POI selection, POI sweep, LDA / QDA classification, and ROC / effect-size figures
+- **Reproducible analysis pipeline** — Python scripts for HPF preprocessing (1 MHz high-pass), normality assessment (Shapiro-Wilk, D'Agostino, Pearson chi-squared), KS-based POI selection with Bonferroni correction, LDA / QDA classification with cross-validation, and publication-quality figures
+
+---
+
+<a id="attack-primitives"></a>
+## Attack primitives (from the paper)
+
+### Flush+Power (Section IV)
+
+A **profiled, timer-free, same-core cache attack** primitive. The attacker shares a memory page with the victim and operates in three steps:
+
+1. **Flush** — evict the monitored cache line from L1.
+2. **Victim activity** — the victim executes normally, potentially bringing lines into L1/L2.
+3. **Power probe** — a fenced `LDRB` to the monitored address triggers a TDC capture. A pre-trained classifier (LDA) determines whether the load was served from L1 (victim touched it) or L2/DRAM (victim did not).
+
+**End-to-end demonstration**: Flush+Power recovers per-byte first-round AES T-table accesses from a single PDN trace (86% balanced accuracy per trace, line-level resolution among 32 cache lines). A line-level sweep (`S=8`) with `R=2` achieves clean single-trace identification.
+
+### SnoopyPower (Section V)
+
+A **profiled, timer-free, cross-core coherence attack** primitive. Two tenants run on separate Cortex-A9 cores with a shared page:
+
+1. **Victim activity** — the victim writes to a shared line, placing it in Modified state in its private L1.
+2. **Coherence probe** — the attacker loads the same address. The SCU resolves this via either a **peer-L1 snoop** (victim holds Modified copy) or the **self path** (local L1/shared L2). Despite these paths differing by less than one cycle in latency (timing-indistinguishable on Arm), they produce distinct PDN signatures.
+
+**End-to-end demonstration**: SnoopyPower identifies the victim-written line among 100 unseen candidate addresses with `r=5` probes per line in under 2 minutes (QDA, 99.9% confidence on the correct line).
+
+> These coherence paths are architecturally engineered to be timing-indistinguishable on Arm (SCU collapses peer-L1 and self-load latencies). **Power, not timing, is the decisive channel.**
 
 ---
 
@@ -69,8 +97,7 @@ under [`hw/ip_repo/`](hw/ip_repo/) preserve their original SCAbox vendor
 namespace (`emse.sas:sca:tdc_bank`, `emse.sas:sca:fifo_and_ctrl`) inside their
 `component.xml` so the Vivado IP catalog still recognises them.
 
-If you use SnoopyPower in academic work, please cite SCAbox alongside this
-project — see [Citation](#citation).
+This repository is an **OS adaptation** of the SCAbox framework to PynqLinux 3.0, providing custom drivers, bitstream, and the full userspace measurement + analysis pipeline. If you use SnoopyPower in academic work, please cite both the HOST 2026 paper and SCAbox — see [Citation](#citation).
 
 ---
 
@@ -374,7 +401,7 @@ Subcommands:
 ## Repository layout
 
 ```
-SnoopyPowerOS/
+SnoopyPower/
 ├── hw/                              # FPGA design files
 │   ├── SnoopyPower.xpr              # Vivado project
 │   ├── snoopypower.bit              # Pre-built bitstream (load directly)
@@ -417,8 +444,16 @@ SnoopyPowerOS/
 <a id="citation"></a>
 ## Citation
 
-If you use SnoopyPower in academic work, please cite this repository
-*and* the SCAbox papers that describe the TDC and RO sensors it builds upon:
+If you use SnoopyPower in academic work, **please cite the HOST 2026 paper**
+and the SCAbox papers that describe the TDC and RO sensors it builds upon:
+
+### Primary reference (this work)
+
+> Eliott Quéré, Maria Méndez Real, Alessandro Palumbo, Thomas Rokicki, Lilian Bossuet, Rubén Salvador.
+> **SnoopyPower! Remote Power Attacks on Cache and Coherence Paths.**
+> *HOST 2026 — IEEE International Symposium on Hardware Oriented Security and Trust*, May 2026, Washington DC, United States.
+
+### SCAbox (upstream TDC/FIFO framework)
 
 > Joseph Gravellier, Jean-Max Dutertre, Yannick Teglia, Philippe Loubet-Moundi,
 > Olivier Francis. **Remote Side-Channel Attacks on Heterogeneous SoC.**
@@ -434,12 +469,13 @@ A `CITATION.cff` file is provided at the root of the repository; GitHub
 will surface the citation automatically.
 
 ```bibtex
-@misc{snoopypower2026,
-  title  = {SnoopyPower: An on-chip TDC power side-channel sensor for
-            Linux-running Cortex-A9 SoCs},
-  author = {Quéré, Eliott},
-  year   = {2026},
-  note   = {Built upon SCAbox (École des Mines de Saint-Étienne).}
+@inproceedings{quere2026snoopypower,
+  title     = {SnoopyPower! Remote Power Attacks on Cache and Coherence Paths},
+  author    = {Qu{\'e}r{\'e}, Eliott and M{\'e}ndez Real, Maria and Palumbo, Alessandro and Rokicki, Thomas and Bossuet, Lilian and Salvador, Rub{\'e}n},
+  booktitle = {HOST 2026 - IEEE International Symposium on Hardware Oriented Security and Trust},
+  year      = {2026},
+  address   = {Washington DC, United States},
+  month     = may,
 }
 
 @inproceedings{gravellier2019remote,
@@ -477,4 +513,3 @@ The TDC and FIFO IP cores under [`hw/ip_repo/`](hw/ip_repo/) are derived
 from [SCAbox](https://gitlab.emse.fr/securityinhardware/SCAbox) (EMSE,
 École des Mines de Saint-Étienne). Refer to the upstream project for the
 license that applies to those individual components.
-# SnoopyPower
